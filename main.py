@@ -50,7 +50,7 @@ def main():
 
         plt.imshow(smoke_values_extracted, origin="lower")
         plt.draw()
-        plt.savefig('smoke_'+ str(i).zfill(3) +'.png')
+        plt.savefig('output/smoke_'+ str(i).zfill(3) +'.png')
         i = i+1
         plt.pause(0.01)
         plt.clf()
