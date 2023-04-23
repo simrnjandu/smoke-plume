@@ -1,4 +1,4 @@
-from phi import flow
+from phi.jax import flow
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -32,6 +32,8 @@ def main():
         resolution=smoke.resolution,
     )
 
+
+
     @flow.math.jit_compile
     def step(velocity_prev, smoke_prev, dt=1.0):
         smoke_next = flow.advect.mac_cormack(smoke_prev, velocity_prev, dt) + inflow
@@ -41,12 +43,16 @@ def main():
         return velocity_next, smoke_next
     
     plt.style.use("dark_background")
-    
+
+    i = 0
+
     for _ in tqdm(range(N_TIME_STEPS)):
         velocity, smoke = step(velocity, smoke)
         smoke_values_extracted = smoke.values.numpy("y,x")
         plt.imshow(smoke_values_extracted, origin="lower")
         plt.draw()
+        plt.savefig('output/smoke_jax_'+ str(i).zfill(3) +'.png')
+        i = i+1
         plt.pause(0.01)
         plt.clf()
         

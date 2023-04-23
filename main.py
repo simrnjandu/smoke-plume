@@ -34,19 +34,24 @@ def main():
     )
 
     def step(velocity_prev, smoke_prev, dt=1.0):
-        smoke_next = flow.advect.mac_cormack(smoke_next,velocity_prev,dt) + inflow
+        smoke_next = flow.advect.mac_cormack(smoke_prev,velocity_prev,dt) + inflow
         bouyancy_force = smoke_next * (0.0,0.1) @ velocity
-        velocity_tent = flow.advect.semi_lagrangian(velcity_prev, velocity_prev,dt) + bouyancy_force * dt
+        velocity_tent = flow.advect.semi_lagrangian(velocity_prev, velocity_prev,dt) + bouyancy_force * dt
         velocity_next, pressure = flow.fluid.make_incompressible(velocity_tent)
         return velocity_next, smoke_next
 
     plt.style.use("dark_background")
 
+    i = 0
+
     for _ in tqdm(range(N_TIME_STEPS)):
         velocity, smoke = step(velocity, smoke)
         smoke_values_extracted = smoke.values.numpy("y,x")
+
         plt.imshow(smoke_values_extracted, origin="lower")
         plt.draw()
+        plt.savefig('smoke_'+ str(i).zfill(3) +'.png')
+        i = i+1
         plt.pause(0.01)
         plt.clf()
 
