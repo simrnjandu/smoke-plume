@@ -1,5 +1,4 @@
-# smoke-plume
-Simulation of a smoke plume using PhiFlow python package.
+# Simulation of a smoke plume using PhiFlow python package.
 
 ![GIF of Smoke Plume](animation.gif)
 
